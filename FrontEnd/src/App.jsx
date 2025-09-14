@@ -1,35 +1,53 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { useState } from "react";
+import Login from "./Components/Login";
+import "./App.css";
 
-function App() {
-  const [count, setCount] = useState(0)
-
+function Home({ displayName }) {
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <section className="home-hero" aria-labelledby="home-title">
+      <div className="hero-inner">
+        <h1 id="home-title">
+          Welcome to FitCheck{displayName ? `, ${displayName}` : ""}!
+        </h1>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    </section>
+  );
 }
 
-export default App
+function App() {
+  const [displayName, setDisplayName] = useState("");
+
+  return (
+    <Router>
+      <div>
+        <nav className="navbar" role="navigation" aria-label="Main navigation">
+          <div className="navbar-left">
+            <h2 className="brand">FitCheck</h2>
+          </div>
+
+          <div className="navbar-right">
+            <Link to="/" className="nav-link nav-link-ghost">
+              Home
+            </Link>
+            <Link to="/login" className="nav-link nav-link-ghost">
+              Login
+            </Link>
+          </div>
+        </nav>
+
+        <main className="page-content">
+          <Routes>
+            <Route path="/" element={<Home displayName={displayName} />} />
+            <Route
+              path="/login"
+              element={<Login setDisplayName={setDisplayName} />}
+            />
+          </Routes>
+        </main>
+      </div>
+    </Router>
+  );
+}
+
+export default App;
