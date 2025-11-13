@@ -1,4 +1,4 @@
-// Taken from reactbits.dev
+// Citation: Taken from reactbits.dev
 import { useEffect, useRef, useCallback, useMemo } from 'react';
 import { gsap } from 'gsap';
 import './TargetCursor.css';

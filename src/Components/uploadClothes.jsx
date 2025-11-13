@@ -1,4 +1,3 @@
-// UploadClothes.jsx
 import { useEffect, useRef, useState } from "react";
 import TargetCursor from "../TargetCursor";
 
@@ -14,7 +13,6 @@ export default function UploadClothes({ displayName }) {
   const [selectedMatch, setSelectedMatch] = useState(null);
   const [hoverIdx, setHoverIdx] = useState(null);
 
-  // synchronous guard to prevent duplicate uploads
   const uploadingRef = useRef(false);
 
   useEffect(() => {
@@ -27,7 +25,6 @@ export default function UploadClothes({ displayName }) {
     return () => URL.revokeObjectURL(url);
   }, [file]);
 
-  // close lightbox on Escape & prevent background scroll while open
   useEffect(() => {
     function onKey(e) {
       if (e.key === "Escape") setSelectedMatch(null);
@@ -47,7 +44,6 @@ export default function UploadClothes({ displayName }) {
   }, [selectedMatch]);
 
   const handleFileChange = (e) => {
-    // user can change file while not uploading; reset results
     setFile(e.target.files?.[0] ?? null);
     setTags(null);
     setMatches([]);
@@ -57,14 +53,11 @@ export default function UploadClothes({ displayName }) {
   };
 
   const handleUpload = async () => {
-    // synchronous guard: return immediately if already uploading
     if (uploadingRef.current) return;
-    // block further calls immediately
     uploadingRef.current = true;
 
     if (!file) {
       setError("Select a file first.");
-      // release guard synchronously
       uploadingRef.current = false;
       return;
     }
@@ -103,7 +96,6 @@ export default function UploadClothes({ displayName }) {
       console.error(err);
       setError(err?.message || "Upload failed");
     } finally {
-      // keep a small UX delay, but ensure guard is released when finished
       setTimeout(() => {
         setLoading(false);
         uploadingRef.current = false;
@@ -344,7 +336,7 @@ const pageStyles = {
     padding: "28px 20px",
     boxSizing: "border-box",
     background: "linear-gradient(180deg, rgba(247,250,252,0.6), rgba(255,255,255,0.6))",
-    overflowY: "auto", // Upload page can scroll internally when content grows
+    overflowY: "auto", 
   },
 
   card: {

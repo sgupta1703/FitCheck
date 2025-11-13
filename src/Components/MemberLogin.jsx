@@ -106,11 +106,9 @@ export default function MemberLogin({ setDisplayName }) {
   );
 }
 
-/* styles copied/adapted from AdminLogin layout, with fontFamily set to match global */
 const FONT_STACK = 'Inter, "Segoe UI", Roboto, Helvetica, Arial, sans-serif';
 
 const pageStyles = {
-  // fill the area under the fixed header exactly and prevent body scroll
   page: {
     height: "calc(100vh - 72px)",
     display: "flex",
@@ -119,10 +117,9 @@ const pageStyles = {
     padding: "28px 20px",
     boxSizing: "border-box",
     background: "linear-gradient(180deg, rgba(247,250,252,0.6), rgba(255,255,255,0.6))",
-    overflow: "hidden", // prevents the document from scrolling; card handles its own overflow
-    fontFamily: FONT_STACK, // ensure this component uses the same font stack
+    overflow: "hidden", 
+    fontFamily: FONT_STACK, 
   },
-  // card will scroll internally if viewport is tiny
   card: {
     width: "100%",
     maxWidth: 540,
@@ -133,7 +130,7 @@ const pageStyles = {
     border: "1px solid rgba(16,24,40,0.04)",
     backdropFilter: "blur(6px)",
     boxSizing: "border-box",
-    maxHeight: "calc(100vh - 160px)", // leave room for header + padding
+    maxHeight: "calc(100vh - 160px)", 
     overflowY: "auto",
     fontFamily: FONT_STACK,
   },
@@ -214,7 +211,6 @@ const pageStyles = {
   },
 };
 
-/* keep the same focus enhancement behavior as AdminLogin */
 (function enhanceFocus() {
   if (typeof window === "undefined") return;
   document.addEventListener("focusin", (e) => {

@@ -135,20 +135,18 @@ export default function CreateAccount() {
   );
 }
 
-/* Styles adapted to match AdminLogin layout (fill header area, prevent body scroll,
-   card scrolls internally on tiny screens). Also defensive fontFamily so it matches global. */
 const FONT_STACK = 'Inter, "Segoe UI", Roboto, Helvetica, Arial, sans-serif';
 
 const styles = {
   page: {
-    height: "calc(100vh - 72px)", // matches AdminLogin's offset under fixed header
+    height: "calc(100vh - 72px)", 
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
     padding: "28px 20px",
     boxSizing: "border-box",
     background: "linear-gradient(180deg, rgba(247,250,252,0.6), rgba(255,255,255,0.6))",
-    overflow: "hidden", // prevent document scroll; allow card to scroll internally if needed
+    overflow: "hidden", 
     fontFamily: FONT_STACK,
   },
   card: {
@@ -161,7 +159,7 @@ const styles = {
     border: "1px solid rgba(16,24,40,0.04)",
     backdropFilter: "blur(6px)",
     boxSizing: "border-box",
-    maxHeight: "calc(100vh - 160px)", // leave room for header + padding
+    maxHeight: "calc(100vh - 160px)", 
     overflowY: "auto",
     fontFamily: FONT_STACK,
   },
@@ -243,7 +241,6 @@ const styles = {
   },
 };
 
-/* keep consistent focus enhancement across pages (same as AdminLogin/MemberLogin) */
 (function enhanceFocus() {
   if (typeof window === "undefined") return;
   document.addEventListener("focusin", (e) => {

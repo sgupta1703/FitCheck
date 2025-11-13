@@ -75,7 +75,6 @@ export default function App() {
   );
 
   return (
-    // ROOT: use a column flex container so main can take remaining space and scroll independently
     <div style={{ position: "relative", background: "transparent", minHeight: "100vh", display: "flex", flexDirection: "column" }}>
       <Router>
 

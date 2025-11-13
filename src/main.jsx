@@ -8,6 +8,5 @@ createRoot(document.getElementById('root')).render(
   <StrictMode>
     <App />
     <TargetCursor spinDuration={2} hideDefaultCursor={true} />
-
   </StrictMode>,
 )
