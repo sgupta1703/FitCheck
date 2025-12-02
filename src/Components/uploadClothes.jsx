@@ -125,54 +125,53 @@ export default function UploadClothes({ displayName }) {
             </div>
           ) : (
             <>
-            <div style={{ position: "relative" }}>
-              <input
-                id="file"
-                name="file"
-                type="file"
-                accept="image/*"
-                onChange={handleFileChange}
-                style={pageStyles.hiddenInput}
-                disabled={loading}
-              />
+              <div style={{ position: "relative" }}>
+                <input
+                  id="file"
+                  name="file"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                  style={pageStyles.hiddenInput}
+                  disabled={loading}
+                />
 
-              <div
-                style={{
-                  ...pageStyles.dropArea,
-                  cursor: loading ? "default" : "pointer",
-                  pointerEvents: loading ? "none" : "auto",
-                  opacity: loading ? 0.8 : 1,
-                }}
-                className="cursor-target"
-                tabIndex={0}
-                onKeyDown={(e) => {
-                  if ((e.key === "Enter" || e.key === " ") && !loading) {
-                    document.getElementById("file")?.click();
-                  }
-                }}
-                onClick={() => !loading && document.getElementById("file")?.click()}
-              >
-                {previewUrl ? (
-                  <img
-                    src={previewUrl}
-                    alt="preview"
-                    style={pageStyles.previewImage}
-                    onError={(e) => {
-                      console.error("Preview load error for", e.target.src);
-                      e.target.style.opacity = 0.6;
-                    }}
-                  />
-                ) : (
-                  <div style={pageStyles.dropHelp}>
-                    <div style={{ fontWeight: 700 }}>Choose an image</div>
-                    <div style={{ fontSize: 13, marginTop: 6, color: "#475569" }}>
-                      .jpg, .png — suggested 800×800 px
+                <div
+                  style={{
+                    ...pageStyles.dropArea,
+                    cursor: loading ? "default" : "pointer",
+                    pointerEvents: loading ? "none" : "auto",
+                    opacity: loading ? 0.8 : 1,
+                  }}
+                  className="cursor-target"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if ((e.key === "Enter" || e.key === " ") && !loading) {
+                      document.getElementById("file")?.click();
+                    }
+                  }}
+                  onClick={() => !loading && document.getElementById("file")?.click()}
+                >
+                  {previewUrl ? (
+                    <img
+                      src={previewUrl}
+                      alt="preview"
+                      style={pageStyles.previewImage}
+                      onError={(e) => {
+                        console.error("Preview load error for", e.target.src);
+                        e.target.style.opacity = 0.6;
+                      }}
+                    />
+                  ) : (
+                    <div style={pageStyles.dropHelp}>
+                      <div style={{ fontWeight: 700 }}>Choose an image</div>
+                      <div style={{ fontSize: 13, marginTop: 6, color: "#475569" }}>
+                        .jpg, .png — suggested 800×800 px
+                      </div>
                     </div>
-                  </div>
-                )}
+                  )}
+                </div>
               </div>
-            </div>
-
 
               <div style={pageStyles.controlsRow}>
                 <div style={pageStyles.fileInfo}>
@@ -237,12 +236,8 @@ export default function UploadClothes({ displayName }) {
                 <div style={{ ...pageStyles.matchesBox }}>
                   <h2 style={pageStyles.subHeading}>Matched Picks!</h2>
 
-                  <div
-                    style={{
-                      ...pageStyles.matchesGrid,
-                      gridTemplateColumns: `repeat(auto-fill, minmax(${MIN_MATCH_CARD_WIDTH}px, 1fr))`,
-                    }}
-                  >
+                  {/* ⭐ NEW HORIZONTAL SCROLL WRAPPER ⭐ */}
+                  <div style={pageStyles.horizontalScroll}>
                     {matches.map((imgPath, idx) => {
                       const src = `http://127.0.0.1:8000/static/${imgPath}`;
                       const isHover = hoverIdx === idx;
@@ -261,6 +256,7 @@ export default function UploadClothes({ displayName }) {
                           onMouseLeave={() => setHoverIdx(null)}
                           style={{
                             ...pageStyles.matchCard,
+                            flex: `0 0 ${MIN_MATCH_CARD_WIDTH}px`,
                             height: MATCH_CARD_HEIGHT,
                             ...(isHover ? pageStyles.matchCardHover : {}),
                           }}
@@ -281,6 +277,7 @@ export default function UploadClothes({ displayName }) {
                       );
                     })}
                   </div>
+                  {/* END NEW SECTION */}
                 </div>
               )}
 
@@ -319,11 +316,9 @@ export default function UploadClothes({ displayName }) {
           </div>
         )}
       </div>
-
     </>
   );
 }
-
 
 const pageStyles = {
   page: {
@@ -339,6 +334,14 @@ const pageStyles = {
     overflowY: "auto", 
   },
 
+    horizontalScroll: {
+    display: "flex",
+    gap: 12,
+    overflowX: "auto",
+    paddingBottom: 10,
+    scrollbarWidth: "thin",
+    scrollbarColor: "#94a3b8 #f8fafc",
+  },
   card: {
     width: "100%",
     maxWidth: 1100,
@@ -498,6 +501,9 @@ const pageStyles = {
     alignItems: "center",
     justifyContent: "center",
     transition: "transform 180ms ease, box-shadow 180ms ease",
+    /* internal padding so images have breathing room inside the card */
+    padding: 12,
+    boxSizing: "border-box",
     cursor: "pointer",
   },
   matchCardHover: {
@@ -507,7 +513,9 @@ const pageStyles = {
   matchImage: {
     width: "100%",
     height: "100%",
-    objectFit: "cover",
+    objectFit: "contain",
+    maxWidth: "100%",
+    maxHeight: "100%",
     display: "block",
     transition: "transform 240ms ease",
   },
