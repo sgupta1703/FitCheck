@@ -8,7 +8,7 @@ function capitalize(str = "") {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-export default function AdminLogin({ setDisplayName }) {
+export default function AdminLogin({ setDisplayName, setIsAdmin }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -43,6 +43,7 @@ export default function AdminLogin({ setDisplayName }) {
           : capitalize(parts[0]);
 
       setDisplayName?.(friendly);
+      setIsAdmin?.(true); 
       setMessage(`Welcome ${friendly}`);
       console.log("Logged in user:", data?.user ?? data);
 
@@ -53,7 +54,6 @@ export default function AdminLogin({ setDisplayName }) {
       setError(err?.message || "An unexpected error occurred");
     }
   }
-
   return (
     <>
       <div style={pageStyles.page}>
