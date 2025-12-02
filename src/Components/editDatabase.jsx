@@ -222,4 +222,8 @@ export default function EditDatabase() {
       </div>
     </div>
   );
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 3692795b4789ea26372b2bda684d82653424221d
