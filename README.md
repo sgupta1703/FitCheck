@@ -1,12 +1,18 @@
-# React + Vite
+# FitCheck
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+FitCheck is an AI-powered virtual outfit matcher that helps users find clothing items that best complement their uploaded images. The backend uses a CLIP-based similarity model to compare user photos with a labeled clothing dataset and return the top matching items.
 
-Currently, two official plugins are available:
+## Features
+- Upload an image and receive AI-selected clothing recommendations  
+- CLIP-based visual similarity matching  
+- Organized clothing library with JSON label metadata  
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Tech Stack
+- React
+- OpenAI CLIP
+- Google Gemini
+- Supabase
+- Python, FastAPI  
+- PyTorch, CLIP  
+- PIL, NumPy  
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
