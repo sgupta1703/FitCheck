@@ -4,7 +4,9 @@ import AdminLogin from "./Components/AdminLogin";
 import MemberLogin from "./Components/MemberLogin";
 import CreateAccount from "./Components/CreateAccount";
 import UploadClothes from "./Components/uploadClothes";
+import EditDatabase from "./Components/editDatabase";
 import TargetCursor from "./TargetCursor";
+import { supabase } from "./Components/supabaseClient"; 
 
 function Home({ displayName }) {
   return (
@@ -40,16 +42,32 @@ function Home({ displayName }) {
 
 export default function App() {
   const [displayName, setDisplayName] = useState("");
+  const [isAdmin, setIsAdmin] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isSmall, setIsSmall] = useState(false);
 
   useEffect(() => {
-    const prevBodyMargin = document.body.style.margin;
+    const prev = document.body.style.margin;
     document.body.style.margin = "0";
     return () => {
-      document.body.style.margin = prevBodyMargin;
+      document.body.style.margin = prev;
     };
   }, []);
+
+  useEffect(() => {
+    const saved = localStorage.getItem("displayName");
+    const savedAdmin = localStorage.getItem("isAdmin");
+    if (saved) setDisplayName(saved);
+    if (savedAdmin === "true") setIsAdmin(true);
+  }, []);
+
+  useEffect(() => {
+    if (displayName) localStorage.setItem("displayName", displayName);
+    else localStorage.removeItem("displayName");
+    
+    if (isAdmin) localStorage.setItem("isAdmin", "true");
+    else localStorage.removeItem("isAdmin");
+  }, [displayName, isAdmin]);
 
   useEffect(() => {
     function onResize() {
@@ -74,6 +92,23 @@ export default function App() {
     </Link>
   );
 
+  const handleLogout = async () => {
+    try {
+      if (supabase?.auth?.signOut) {
+        await supabase.auth.signOut();
+      }
+    } catch (err) {
+      console.warn("Sign out error:", err);
+    } finally {
+      setDisplayName("");
+      setIsAdmin(false);
+      localStorage.removeItem("displayName");
+      localStorage.removeItem("isAdmin");
+      setMobileOpen(false);
+      window.location.href = "/";
+    }
+  };
+
   return (
     <div style={{ position: "relative", background: "transparent", minHeight: "100vh", display: "flex", flexDirection: "column" }}>
       <Router>
@@ -94,6 +129,9 @@ export default function App() {
               <div className="cursor-target"><NavLink to="/">Home</NavLink></div>
               <div className="cursor-target"><NavLink to="/login">Admin</NavLink></div>
               <div className="cursor-target"><NavLink to="/upload">Upload</NavLink></div>
+              {isAdmin && (
+                <div className="cursor-target"><NavLink to="/edit">Edit</NavLink></div>
+              )}
             </div>
 
             <button
@@ -110,8 +148,28 @@ export default function App() {
 
           <div style={styles.navRight}>
             <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-              <div className="cursor-target"><Link to="/member-login" style={{ ...styles.button, ...styles.ghostButton }}>Sign in</Link></div>
-              <div className="cursor-target"><Link to="/create-account" style={{ ...styles.button, ...styles.primaryButton }}>Get Started</Link></div>
+              {displayName ? (
+                <>
+                  <div style={{ fontWeight: 700, color: "#0b1220", padding: "8px 12px", borderRadius: 10, display: 'flex', alignItems: 'center', gap: 8 }}>
+                    Hello,
+                    <strong style={{ fontWeight: 700, fontFamily: "Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial", color: "inherit" }}>{displayName}</strong>
+                    {isAdmin && <span style={{ fontSize: 11, background: "#6366f1", color: "white", padding: "2px 6px", borderRadius: 4, fontWeight: 600 }}>ADMIN</span>}
+                  </div>
+                  <button
+                    onClick={handleLogout}
+                    className="cursor-target"
+                    style={{ ...styles.button, ...styles.ghostButton, padding: "10px 14px", borderRadius: 10 }}
+                    aria-label="Log out"
+                  >
+                    Logout
+                  </button>
+                </>
+              ) : (
+                <>
+                  <div className="cursor-target"><Link to="/member-login" style={{ ...styles.button, ...styles.ghostButton }}>Sign in</Link></div>
+                  <div className="cursor-target"><Link to="/create-account" style={{ ...styles.button, ...styles.primaryButton }}>Get Started</Link></div>
+                </>
+              )}
             </div>
           </div>
         </header>
@@ -123,6 +181,17 @@ export default function App() {
             <NavLink to="/member-login">Members</NavLink>
             <NavLink to="/create-account">Create</NavLink>
             <NavLink to="/upload">Upload</NavLink>
+            {isAdmin && <NavLink to="/edit">Edit</NavLink>}
+            
+            {displayName ? (
+              <button
+                onClick={() => { setMobileOpen(false); handleLogout(); }}
+                style={{ ...styles.navLinkMobile, textAlign: "left", border: "none", background: "transparent", padding: "12px 16px", cursor: "pointer" }}
+                className="cursor-target"
+              >
+                Logout
+              </button>
+            ) : null}
           </div>
         ) : null}
 
@@ -141,7 +210,7 @@ export default function App() {
             <Route path="/" element={<Home displayName={displayName} />} />
             <Route
               path="/login"
-              element={<AdminLogin setDisplayName={setDisplayName} />}
+              element={<AdminLogin setDisplayName={setDisplayName} setIsAdmin={setIsAdmin} />}
             />
             <Route
               path="/member-login"
@@ -151,6 +220,10 @@ export default function App() {
             <Route
               path="/upload"
               element={<UploadClothes displayName={displayName} />}
+            />
+            <Route
+              path="/edit"
+              element={isAdmin ? <EditDatabase /> : <Home displayName={displayName} />}
             />
           </Routes>
         </main>
@@ -313,5 +386,4 @@ const styles = {
     border: "1px solid rgba(16,24,40,0.06)",
     color: "#0b1720",
   },
-
 };

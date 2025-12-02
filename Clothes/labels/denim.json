@@ -21,7 +21,7 @@
     "women": true,
     "unisex": false,
     "kids": false,
-    "casual": true,
+    "casual": false,
     "formal": false,
     "sporty": false,
     "vintage": false,
